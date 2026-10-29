@@ -3,9 +3,9 @@
 import pytest
 from playwright.sync_api import expect
 
-from pages.shop_page import ShopPage
 from pages.cart_page import CartPage
 from pages.checkout_page import CheckoutPage
+from pages.shop_page import ShopPage
 
 
 @pytest.mark.checkout
@@ -31,4 +31,3 @@ def test_complete_checkout_places_order(
     # The order-success banner shows a generated order id like "NS-4680871".
     expect(checkout_page.order_success).to_be_visible()
     expect(checkout_page.order_id).to_contain_text("NS-")
-

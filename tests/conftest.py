@@ -38,11 +38,11 @@ from pathlib import Path
 
 import pytest
 
-from config import USERNAME, PASSWORD
-from pages.login_page import LoginPage
-from pages.shop_page import ShopPage
+from config import PASSWORD, USERNAME
 from pages.cart_page import CartPage
 from pages.checkout_page import CheckoutPage
+from pages.login_page import LoginPage
+from pages.shop_page import ShopPage
 
 
 @pytest.fixture
@@ -55,10 +55,10 @@ def logged_in_page(page):
     `page` is provided by the pytest-playwright plugin: a fresh, isolated
     browser tab for this single test. We log in once here and hand it back.
     """
-    login = LoginPage(page)          # wrap the raw tab in a LoginPage object
-    login.load()                     # open /shop (the login form)
+    login = LoginPage(page)  # wrap the raw tab in a LoginPage object
+    login.load()  # open /shop (the login form)
     login.login(USERNAME, PASSWORD)  # fill creds + submit + wait for products
-    return page                      # the tab is now authenticated
+    return page  # the tab is now authenticated
 
 
 @pytest.fixture

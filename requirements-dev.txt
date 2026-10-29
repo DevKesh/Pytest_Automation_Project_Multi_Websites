@@ -1,0 +1,6 @@
+# requirements-dev.txt — tools used only in CI / local development (not runtime).
+# Install with:  pip install -r requirements-dev.txt
+
+# Ruff: an extremely fast linter + formatter. Used by the CI "lint" job as
+# part of the quality gate.
+ruff==0.6.9

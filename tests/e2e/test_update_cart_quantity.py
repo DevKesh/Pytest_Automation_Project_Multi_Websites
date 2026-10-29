@@ -3,8 +3,8 @@
 import pytest
 from playwright.sync_api import expect
 
-from pages.shop_page import ShopPage
 from pages.cart_page import CartPage
+from pages.shop_page import ShopPage
 
 
 @pytest.mark.regression
@@ -19,4 +19,3 @@ def test_increase_product_quantity(shop_page: ShopPage, cart_page: CartPage):
     cart_page.increase_quantity(product_name, times=2)
 
     expect(cart_page.quantity_of(product_name)).to_have_text("3")
-

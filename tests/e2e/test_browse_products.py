@@ -20,4 +20,3 @@ def test_search_filters_catalogue(shop_page: ShopPage, product_data):
     shop_page.search("Aurora")
     expect(shop_page.product_card(target)).to_be_visible()
     assert shop_page.total_products() == 1
-

@@ -1,0 +1,22 @@
+# ruff.toml — configuration for the Ruff linter/formatter (quality gate).
+
+# Target the Python version we run on.
+target-version = "py312"
+
+# A readable line length (Ruff's default is 88).
+line-length = 100
+
+# Never lint generated / vendored directories.
+extend-exclude = [".venv", "reports", "__pycache__"]
+
+[lint]
+# A pragmatic rule set:
+#   E, W  -> pycodestyle errors/warnings
+#   F     -> pyflakes (undefined names, unused imports)
+#   I     -> isort (import ordering)
+#   UP    -> pyupgrade (modern syntax)
+#   B     -> flake8-bugbear (likely bugs)
+select = ["E", "W", "F", "I", "UP", "B"]
+
+# E501 (line too long) is handled by the formatter; don't fail the gate on it.
+ignore = ["E501"]

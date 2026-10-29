@@ -21,6 +21,36 @@ on:
   workflow_dispatch:
 
 jobs:
+  # --------------------------------------------------------------------- #
+  # Quality gate stage 1: static analysis. Fast, runs before/alongside the
+  # browser tests. A lint failure blocks the gate.
+  # --------------------------------------------------------------------- #
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dev tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      # `ruff check` fails (non-zero exit) on any lint violation.
+      - name: Run ruff lint
+        run: ruff check .
+
+      # `ruff format --check` fails if code isn't formatted (doesn't rewrite).
+      - name: Run ruff format check
+        run: ruff format --check .
+
   e2e:
     name: E2E (${{ matrix.browser }})
     runs-on: ubuntu-latest
@@ -72,3 +102,25 @@ jobs:
           name: reports-${{ matrix.browser }}
           path: reports/
           retention-days: 14
+
+  # --------------------------------------------------------------------- #
+  # Quality gate stage 2: the gate itself. Runs after lint + e2e and FAILS
+  # the whole workflow unless every dependency succeeded. Make this the
+  # required status check in branch protection to block merges on red.
+  # --------------------------------------------------------------------- #
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    # Run even if a dependency failed, so we can report an accurate verdict.
+    if: always()
+    needs: [lint, e2e]
+    steps:
+      - name: Verify all required checks passed
+        run: |
+          echo "lint result: ${{ needs.lint.result }}"
+          echo "e2e result:  ${{ needs.e2e.result }}"
+          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.e2e.result }}" != "success" ]; then
+            echo "::error::Quality gate failed — see the lint/e2e jobs above."
+            exit 1
+          fi
+          echo "✅ Quality gate passed."

@@ -109,6 +109,27 @@ playwright show-trace reports/test-results/<test>/trace.zip
 The practice site exposes shared demo accounts (see the login page hint).
 This framework uses `demo_user` / `Demo@123`, set in `config.py`.
 
+## Quality gate (CI)
+
+Every push / PR runs a quality gate in GitHub Actions
+([`.github/workflows/playwright-tests.yml`](.github/workflows/playwright-tests.yml)):
+
+1. **Lint** — `ruff check` + `ruff format --check` (config in `ruff.toml`).
+2. **E2E** — the suite runs on a matrix of Chromium, Firefox and WebKit.
+3. **Quality Gate** — a final job that **fails the workflow unless lint *and*
+   every browser job succeeded**. Set this job as the required status check in
+   branch protection to block merges on red.
+
+Run the same checks locally before pushing:
+
+```powershell
+pip install -r requirements-dev.txt
+ruff check .            # lint
+ruff format .           # auto-format
+pytest                  # tests
+```
+
+
 See [`docs/framework-creation-guide.md`](docs/framework-creation-guide.md) for a
 full, step-by-step explanation of how the framework was built, including a
 concept glossary.
