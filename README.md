@@ -1,15 +1,11 @@
-# Nova Shop — Playwright + Pytest E2E Framework
+# Pytest Automation Project — Multi Websites
 
 [![Playwright E2E Tests](https://github.com/DevKesh/Pytest_Automation_Project_Multi_Websites/actions/workflows/playwright-tests.yml/badge.svg)](https://github.com/DevKesh/Pytest_Automation_Project_Multi_Websites/actions/workflows/playwright-tests.yml)
 
-A clean, production-style end-to-end test framework for the **Nova Shop**
+A multi-website test automation project built with **Python + Playwright +
+pytest** using the Page Object Model. The first suite targets the **Nova Shop**
 practice app at [practiceqaautomation.com/shop](https://www.practiceqaautomation.com/shop),
-built with **Python + Playwright + pytest** using the Page Object Model.
-
-It keeps things simple and idiomatic: it relies on the official
-`pytest-playwright` plugin for the browser lifecycle, cross-browser execution,
-tracing, screenshots and video — so there is no hand-rolled plumbing to
-maintain.
+with the structure designed to add more websites over time.
 
 ---
 
