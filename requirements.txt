@@ -1,0 +1,13 @@
+# Install with:  pip install -r requirements.txt
+# Then:          playwright install
+
+pytest==8.3.3
+
+# Playwright + its official pytest plugin. The plugin provides the `page`
+# fixture and the --browser / --headed / --tracing / --screenshot / --video
+# command-line options, so we don't hand-roll browser lifecycle code.
+playwright==1.47.0
+pytest-playwright==0.5.2
+
+# Self-contained HTML report (reports/report.html).
+pytest-html==4.1.1

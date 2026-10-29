@@ -1,0 +1,74 @@
+# ==============================================================================
+# .github/workflows/playwright-tests.yml
+# ------------------------------------------------------------------------------
+# CI pipeline that runs the Playwright E2E suite across all three browser
+# engines in parallel using a build matrix — mirroring the local cross-browser
+# model. Artifacts (HTML report, traces, screenshots, videos) are uploaded on
+# every run so failures can be triaged from the GitHub UI.
+# ==============================================================================
+
+name: Playwright E2E Tests
+
+# ----------------------------------------------------------------------------
+# Triggers — when the pipeline runs.
+# ----------------------------------------------------------------------------
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  # Allows manual runs from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    name: E2E (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+
+    # --------------------------------------------------------------------- #
+    # Matrix: one parallel job per browser engine. fail-fast=false ensures a
+    # failure in one browser does not cancel the others (full visibility).
+    # --------------------------------------------------------------------- #
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      # 1. Check out the repository source.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Install the requested Python version.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip  # Cache pip downloads keyed on requirements.txt.
+
+      # 3. Install Python dependencies.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Install the browser binaries + OS libraries for this matrix engine.
+      #    --with-deps pulls the required system packages on Ubuntu.
+      - name: Install Playwright browser (${{ matrix.browser }})
+        run: python -m playwright install --with-deps ${{ matrix.browser }}
+
+      # 5. Run the suite headless against this matrix browser.
+      #    `--browser` is provided by the pytest-playwright plugin.
+      - name: Run E2E tests
+        run: |
+          pytest --browser ${{ matrix.browser }} \
+            --html=reports/report-${{ matrix.browser }}.html --self-contained-html
+
+      # 6. Always upload artifacts (even on failure) for post-run analysis.
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-${{ matrix.browser }}
+          path: reports/
+          retention-days: 14

@@ -1,0 +1,12 @@
+{
+  "comment": "Static product data for the Nova Shop app (practiceqaautomation.com/shop). Product cards use 1-based indexes p1..p12. p3 (Nimbus Bluetooth Speaker) is intentionally sold out.",
+  "products": [
+    { "index": 1, "name": "Aurora Wireless Headphones", "price": "$129.99" },
+    { "index": 2, "name": "Pulse Smartwatch", "price": "$199.00" },
+    { "index": 4, "name": "Lumen Desk Lamp", "price": "$34.99" },
+    { "index": 5, "name": "Terra Ceramic Mug Set", "price": "$24.00" }
+  ],
+  "checkout_product_index": 1,
+  "checkout_product_name": "Aurora Wireless Headphones",
+  "total_products": 12
+}

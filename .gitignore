@@ -1,0 +1,29 @@
+# ==============================================================================
+# .gitignore — Keep the repository clean
+# ==============================================================================
+
+# Python bytecode & caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment configuration (never commit secrets)
+.env
+
+# Test output / reports / Playwright artifacts
+reports/
+test-results/
+playwright-report/
+
+# IDE
+.idea/
+.vscode/
+
+# Temporary scratch files
+_*.txt
